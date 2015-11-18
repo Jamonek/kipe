@@ -8,6 +8,10 @@
 
 import UIKit
 import CoreData
+import Parse
+import FBSDKCoreKit
+import ParseFacebookUtilsV4
+import ParseTwitterUtils
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -17,6 +21,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        Parse.setApplicationId("xxHD03Q42QMwkaFE18NRDCKTWwNTdxOSsGQ59nQV",
+            clientKey: "sfGzIop9EZpAgyBnqNpS7ZcEOJkHbLlkEJZ0xU4N")
+        PFTwitterUtils.initializeWithConsumerKey("fX5HLGFLieycwXEuleA7eRw69", consumerSecret:"eGe7CYMfFwgNNjinEBUqM6Mvvs1lmQ24aNxwLP48AzExWsHcWt")
+        PFFacebookUtils.initializeFacebookWithApplicationLaunchOptions(launchOptions)
         return true
     }
 
@@ -36,6 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidBecomeActive(application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        FBSDKAppEvents.activateApp()
     }
 
     func applicationWillTerminate(application: UIApplication) {
@@ -43,7 +52,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Saves changes in the application's managed object context before the application terminates.
         self.saveContext()
     }
-
+    
+    func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
+            return FBSDKApplicationDelegate.sharedInstance().application(application,
+                openURL: url,
+                sourceApplication: sourceApplication,
+                annotation: annotation)
+    }
+    
     // MARK: - Core Data stack
 
     lazy var applicationDocumentsDirectory: NSURL = {
